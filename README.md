@@ -33,4 +33,13 @@ book-agent-backend/
 │
 └── scripts/
     └── embed_init.py
+    └── import_books.py
+```
+1. 設定 Python 虛擬環境
+```
+python -m venv .venv
+
+source .venv/bin/activate
+
+pip install -r requirements.txt
 ```
