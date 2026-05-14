@@ -108,10 +108,14 @@ class MemoryState(BaseModel):
     current_scene_id: Optional[str] = None
 
 class UserRequest(BaseModel):
-    """前端傳入的請求"""
     user_id: str
-    message: str
+    message: str                      # 無論打字或點按鈕，文字都放在這
+    
+    # 如果是從測驗或劇情按鈕點擊的，前端才需要帶這個 ID
+    interaction_id: Optional[str] = None 
+    
     current_book_id: Optional[str] = None
+    timestamp: float
 
 class AgentResponse(BaseModel):
     """後端最終回傳給前端的包裹"""
