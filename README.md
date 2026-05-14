@@ -29,11 +29,11 @@ book-agent-backend/
 │   └── character_service.py
 │
 ├── models/
-│   └── schema.py
-│
-└── scripts/
-    └── embed_init.py
-    └── import_books.py
+    └── schema.py
+
+scripts/
+├── embed_init.py
+├── import_books.py
 ```
 1. 設定 Python 虛擬環境
 ```
