@@ -62,6 +62,33 @@ class QuizStory(BaseModel):
     class Config:
         populate_by_name = True
 
+# 1. 題目選項模型
+class QuizOption(BaseModel):
+    option_id: str
+    text: str
+    character_scores: Dict[str, int] # 靈活儲存如 {"romeo": 2}
+
+# 2. 題目主體模型
+class QuizQuestion(BaseModel):
+    id: str = Field(alias="_id")
+    quiz_id: str
+    question_text: str
+    order: int
+    options: List[QuizOption]
+
+    class Config:
+        populate_by_name = True
+
+# 3. 測驗結果模型 (用於最後產出分析報告)
+class QuizResult(BaseModel):
+    character_key: str
+    character_name: str
+    character_title: str
+    quote: str
+    analysis: str
+    mbti: Optional[str]
+    traits: List[str]
+
 # ==========================================
 # 2. 中層分析與工具輸出 (對應 Tools & Services)
 # ==========================================
