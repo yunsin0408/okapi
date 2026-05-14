@@ -69,6 +69,7 @@ PY
 cd /path/to/okapi         
 source .venv/bin/activate
 python scripts/import_books.py
+python scripts/import_quotes.py
 ```
 
 ### 成功時輸出
