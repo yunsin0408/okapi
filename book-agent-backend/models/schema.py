@@ -122,6 +122,19 @@ class PreviewPurchaseOutput(BaseModel):
     sample_link: str
     price_info: Optional[str] = None
 
+class StoryChoice(BaseModel):
+    """選項表模型 (對應 choices collection)"""
+    id: str = Field(alias="_id")
+    scene_id: str
+    text: str                   # 按鈕文字
+    static_reply: str           # 點擊後的即時回饋
+    next_scene_id: Optional[str] # 下一個場景
+    cta_text: Optional[str]     # 導購按鈕文字 (選填)
+    buy_url: Optional[str]      # 購買網址 (選填)
+
+    class Config:
+        populate_by_name = True
+
 # ==========================================
 # 3. 系統狀態與通訊 (對應 Agent & Frontend)
 # ==========================================
