@@ -41,40 +41,89 @@ PY
 
 ---
 
-## `import_books.py`：將 `data/books.csv` 匯入 MongoDB
+## CSV 共通格式（長表）
 
-### 功能
+試算表下載為 CSV 時，請統一使用 **長表**：
 
-- 讀取專案根目錄下的 **`data/books.csv`**，解析後寫入 MongoDB 集合 **`books`**。
-- **增量匯入**：不會清空集合；同一本書再次匯入會**更新**而非重複插入。
-- **比對鍵**：有 **`purchase_url`**（非空白）時以網址比對；否則以 **`title` + `author`** 比對。
+- **第一列**：英文欄位名（header）。
+- **第二列起**：一列一筆資料（一本書、一則金句、一個角色各一列）。
+- 編碼建議 **UTF-8**；欄位內若有逗號，試算表匯出時會自動加引號。
 
-### CSV 格式（重要）
+排版可參考同目錄截圖（每種資料類型各一張表時，各自為長表即可）：
 
-表格為「**寬表**」：第一欄為欄位名稱，每一欄往右代表一本書。必填欄位名稱（第一欄文字）須包含：
+![試算表長表範例（第一列為欄名，下方每列一筆）](spreadsheet.png)
 
-`title`、`author`、`purchase_url`、`category`、`summary`、`sample_link`、`tags`
+---
 
-- `tags`：字串內以英文逗號 `,` 分隔多個標籤，匯入後為陣列。
+## `import_books.py`：`data/books.csv` → `books`
 
-試算表可照下圖排版（A 欄為欄位名，往右每一欄一本書）；編輯完成後匯出為 CSV，對應 `data/books.csv` 即可。
+| 欄位 | 說明 |
+|------|------|
+| `title` | 書名 |
+| `author` | 作者 |
+| `purchase_url` | 購書連結 |
+| `category` | 分類 |
+| `summary` | 簡介 |
+| `sample_link` | 試閱連結 |
+| `tags` | 英文逗號 `,` 分隔，匯入為陣列 |
 
-![試算表寬表範例（A 欄欄位名，B／C 欄為兩本書）](spreadsheet.png)
+- **增量**：有 **`purchase_url`**（非空白）時以網址 upsert；否則以 **`title` + `author`** upsert。
+- **不會**清空整個 `books` 集合。
 
-### 執行方式
+---
 
-**在專案根目錄執行**（腳本使用相對路徑 `data/books.csv`）：
+## `import_quotes.py`：`data/quotes.csv` → `quotes`
+
+| 欄位 | 必填 | 說明 |
+|------|------|------|
+| `book_title` | 是 | 須與 `books` 裡的 `title` **完全一致** |
+| `content` | 是 | 金句本文（空白列會略過） |
+| `emotion_tags` | 否 | 英文逗號分隔，匯入為陣列 |
+
+- **增量**：以 **`book_ref`（書籍 `_id`）+ `content`** upsert；CSV 沒寫到的金句**不會被刪除**。
+- 請先匯入書籍，再匯入金句（需能查到對應書名）。
+
+---
+
+## `import_characters.py`：`data/characters.csv` → `characters`
+
+| 欄位 | 必填 | 說明 |
+|------|------|------|
+| `book_title` | 是 | 須與 `books` 的 `title` 一致 |
+| `name` | 是 | 角色名稱 |
+| `description` | 是 | 描述 |
+| `mbti` | 否 | 會寫入 `personality_tags`（單一標籤陣列） |
+| `image_url` | 否 | 圖片網址 |
+
+- **增量**：以 **`book_id` + `name`** upsert。
+- 請先匯入書籍。
+
+---
+
+## 執行方式
+
+**在專案根目錄**執行（腳本使用 `data/*.csv` 相對路徑）：
 
 ```bash
-cd /path/to/okapi         
+cd /path/to/okapi
 source .venv/bin/activate
+pip install -r requirements.txt   # 首次
+
 python scripts/import_books.py
 python scripts/import_quotes.py
+python scripts/import_characters.py
 ```
+
+建議順序：**書籍 → 金句／角色**（後兩者依 `book_title` 關聯 `books`）。
 
 ### 成功時輸出
 
-終端機會列出解析到的書名，最後出現類似：
+各腳本結尾會印出增量統計（新增／更新／比對筆數），或「無資料可匯入」等提示。
 
-`增量匯入完成：新增 N 筆、更新 M 筆、比對到 K 筆既有文件`
+### 常見問題
 
+| 狀況 | 處理方式 |
+|------|----------|
+| 找不到 `MONGO_URI` | 確認專案根有 `.env`。 |
+| 金句／角色找不到書 | 先跑 `import_books.py`，並核對 `book_title` 與資料庫 `title` 一致。 |
+| 找不到 `data/*.csv` | 勿先 `cd scripts`，請在專案根執行。 |
