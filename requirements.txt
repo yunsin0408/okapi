@@ -10,8 +10,8 @@ pandas                # 處理 CSV 讀取、轉置與資料清洗
 numpy                 # 數值計算輔助
 
 # --- 大語言模型 (LLM) ---
-
-
+openai         
+               
 # --- 向量搜尋---
 chromadb              # 向量資料庫
 
