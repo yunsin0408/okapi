@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     
     # 3. 資料庫設定 
     MONGO_URI: str
-    MONGO_DB_NAME: str = "book_agent_db" 
+    MONGO_DB_NAME: str = "okapi" 
     # 使用 Pydantic Settings 讀取 .env 的核心設定
     model_config = SettingsConfigDict(
         env_file=os.path.join(BASE_DIR, ".env"),
