@@ -69,8 +69,7 @@ def import_characters(csv_path: str) -> None:
                 str(row["description"]).strip() if pd.notna(row["description"]) else ""
             )
             mbti_raw = row["mbti"] if "mbti" in df.columns else None
-            mbti = str(mbti_raw).strip() if pd.notna(mbti_raw) else ""
-            personality_tags: list[str] = [mbti] if mbti else []
+            personality_tags: str = str(mbti_raw).strip() if pd.notna(mbti_raw) else ""
 
             image_url: str | None = None
             if "image_url" in df.columns and pd.notna(row.get("image_url")):
