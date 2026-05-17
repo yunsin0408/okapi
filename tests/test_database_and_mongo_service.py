@@ -62,6 +62,33 @@ class TestMongoService(unittest.TestCase):
         results = self.mongo_service.find_many("books", {"tags": {"$in": ["愛情"]}})
         self.assertEqual(len(results), 1)
 
+    def test_insert_one_returns_id(self):
+        new_book = {
+            "_id": "book2",
+            "title": "新書",
+            "author": "作者B",
+            "category": "科幻",
+            "summary": "摘要",
+            "tags": [],
+            "purchase_url": "",
+            "sample_link": "",
+        }
+        inserted_id = self.mongo_service.insert_one("books", new_book)
+        self.assertEqual(inserted_id, "book2")
+        result = self.mongo_service.find_one("books", {"_id": "book2"})
+        self.assertIsNotNone(result)
+        self.assertEqual(result["title"], "新書")
+
+    def test_update_one_modifies_field(self):
+        modified = self.mongo_service.update_one("books", {"_id": "book1"}, {"title": "更新後的書名"})
+        self.assertEqual(modified, 1)
+        result = self.mongo_service.find_one("books", {"_id": "book1"})
+        self.assertEqual(result["title"], "更新後的書名")
+
+    def test_update_one_no_match(self):
+        modified = self.mongo_service.update_one("books", {"_id": "notexist"}, {"title": "X"})
+        self.assertEqual(modified, 0)
+
 
 class TestDatabaseSingleton(unittest.TestCase):
     def test_get_db_returns_same_instance(self):
