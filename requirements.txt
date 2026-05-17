@@ -18,3 +18,7 @@ chromadb              # 向量資料庫
 # --- 後端 API (若 main.py 使用 FastAPI) ---
 fastapi               # 後端 API 框架
 uvicorn               # ASGI 伺服器，執行 FastAPI 用
+
+# --- 測試 ---
+pytest
+mongomock
