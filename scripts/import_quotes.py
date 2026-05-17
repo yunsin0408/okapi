@@ -9,7 +9,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from pymongo import MongoClient, UpdateOne
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), "../backend/.env"))
 
 
 def import_quotes(csv_path: str) -> None:
