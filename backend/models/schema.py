@@ -146,6 +146,7 @@ class MemoryState(BaseModel):
     recommended_book_ids: List[str] = []
     quiz_scores: Dict[str, int] = {}
     current_scene_id: Optional[str] = None
+    chat_history: List[Dict[str, str]] = []
 
 class UserRequest(BaseModel):
     user_id: str
