@@ -36,7 +36,7 @@ class Character(BaseModel):
     book_id: str                # 關聯到 Book._id
     name: str
     description: str
-    personality_tags: List[str] # 例如 ["樂觀", "謹慎"]
+    personality_tags: str # mbti
     image_url: Optional[str] = None
 
     class Config:
