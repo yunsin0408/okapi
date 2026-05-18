@@ -29,5 +29,8 @@ class Settings(BaseSettings):
         extra="ignore" # 如果 .env 有多寫其他東西，自動忽略不報錯
     )
 
+    MAX_CHAT_HISTORY_LENGTH: int = 20
+    MAX_PREFERENCE_TAGS: int = 10
+
 # 實例化全域設定物件，其他檔案直接 import 這個 settings 即可
 settings = Settings()
