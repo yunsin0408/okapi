@@ -97,7 +97,6 @@ class MoodIntentOutput(BaseModel):
     """C 組 mood_intent_tool 輸出"""
     mood: str
     intent: str
-    urgency: int = Field(ge=1, le=5)
     should_trigger_tool: bool
 
 class QuoteBookOutput(BaseModel):
