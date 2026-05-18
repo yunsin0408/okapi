@@ -26,7 +26,7 @@ MOOD_INTENT_PROMPT = """
 2.  intent (意圖)： 使用者發出此訊息的主要目的（請從以下類別選擇：recommendation, quiz, story, general_chat, greeting, memory_update, off_topic）。
 3.  scene (情境)： 使用者可能處於的閱讀或生活情境（建議分類：通勤中、週末放鬆、工作壓力大、睡前、尋求知識、自我成長）。若無法判斷，填寫 "general"。
 4.  tone (語氣)： 使用者使用的語氣風格（建議分類：正式、隨意、求助、抱怨、好奇、指令式）。
-5.  should_trigger_recommendation (布林值)： 判斷 Agent 是否應立即呼叫推薦工具。
+5.  should_trigger_tool (布林值)： 判斷 Agent 是否應立即呼叫推薦工具。
     -   如果 intent 是 'recommendation'、'quiz'、'story'，或情緒強烈（如低落、焦慮、憤怒）且需要內容輔助，則回傳 true。
     -   如果 intent 是 'greeting'、'general_chat'、'off_topic'，則回傳 false。
 
